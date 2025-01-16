@@ -13,7 +13,6 @@ from google.cloud import storage
 import replicate
 
 load_dotenv()
-#os.environ["REPLICATE_API_TOKEN"] = os.getenv("REPLICATE_API_TOKEN")
 
 # credential_path = "D:\RL\IYKRA\Capstone\application_default_credentials.json"
 # os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = credential_path
@@ -124,20 +123,25 @@ def handle_click(action, product_id, url):
 
 # virtual try on function
 def virtual_tryon(garment_img_path, person_img_path, prod_id):
-    print("download from gcs")
+    print("download")
     garment_image = download_image_from_gcs(garment_img_path)
     person_image = download_image_from_gcs(person_img_path)
-    print("to bytes")
+    print("bytes")
     garment_file = BytesIO()
     person_file = BytesIO()
+    if garment_image.mode == "RGBA":
+        garment_image = garment_image.convert("RGB")
+    if person_image.mode == "RGBA":
+        person_image = person_image.convert("RGB")
+    print("save")
     garment_image.save(garment_file, format="JPEG")
     person_image.save(person_file, format="JPEG")
-    print("to file")
+    print("seek")
     garment_file.seek(0)
     person_file.seek(0)
+    print("vton")
     type = df_products[df_products['Product_ID'] == prod_id]["Type"].to_string(index=False)
     short_desc = df_products[df_products['Product_ID'] == prod_id]["Category"].to_string(index=False)
-    print("vton")
     input = {
         "seed": 42,
         "steps": 30,
