@@ -13,7 +13,7 @@ from google.cloud import storage
 import replicate
 
 load_dotenv()
-os.environ["REPLICATE_API_TOKEN"] = os.getenv("REPLICATE_API_TOKEN")
+#os.environ["REPLICATE_API_TOKEN"] = os.getenv("REPLICATE_API_TOKEN")
 
 # credential_path = "D:\RL\IYKRA\Capstone\application_default_credentials.json"
 # os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = credential_path
