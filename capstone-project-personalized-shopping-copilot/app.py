@@ -14,6 +14,7 @@ import replicate
 
 load_dotenv()
 
+
 # credential_path = "D:\RL\IYKRA\Capstone\application_default_credentials.json"
 # os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = credential_path
 
