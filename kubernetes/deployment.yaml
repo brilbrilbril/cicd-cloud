@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tes-capstone
+  labels:
+    app: tes-capstone
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tes-capstone
+  template:
+    metadata:
+      labels:
+        app: tes-capstone
+    spec:
+      containers:
+      - name: tes-capstone
+        image: brillyando/tes_capstone:0.0.1
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: google-credentials
+          mountPath: /key.json  # Mount the secret as /key.json inside the container
+          subPath: capstone-deploy-447802-13b32c16ede7.json  # Use the file from the secret
+        env:
+        - name: GOOGLE_APPLICATION_CREDENTIALS
+          value: /key.json  # Path inside the container for the credentials
+      volumes:
+      - name: google-credentials
+        secret:
+          secretName: google-credentials  # Secret that contains the credentials file
