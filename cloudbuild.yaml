@@ -1,10 +1,16 @@
 options:
   logging: CLOUD_LOGGING_ONLY
 steps:
+  #build
   - name: 'gcr.io/cloud-builders/docker'
     args: ['build', '-t', 'gcr.io/capstone-deploy-447802/chatbot-app:latest', '.']
+  #push
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'gcr.io/capstone-deploy-447802/chatbot-app:latest']
-     
+  #deploy
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args: ['run', 'deploy', 'chatbot-app', '--image', 'gcr.io/capstone-deploy-447802/chatbot-app:latest', '--region', 'us-central1', '--platform', 'managed']
+  
 images:
   - 'gcr.io/capstone-deploy-447802/chatbot-app:latest'
