@@ -14,7 +14,6 @@ import replicate
 
 load_dotenv()
 
-
 # credential_path = "D:\RL\IYKRA\Capstone\application_default_credentials.json"
 # os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = credential_path
 
@@ -172,7 +171,7 @@ def download_image_from_gcs(img_path):
     blob = client.bucket(bucket_name).blob(img_path)
     image_bytes = blob.download_as_bytes()
     # Open the image from the downloaded bytes
-    image = Image.open(BytesIO(image_bytes))
+    image = Image.open(BytesIO(image_bytes)).convert("RGB")
     return image
 
 def render_product(product_id):
