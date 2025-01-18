@@ -30,7 +30,7 @@ df_products = pd.read_csv(StringIO(prod_catalog))
 def load_vector_db():
     embeddings = OpenAIEmbeddings(model="text-embedding-ada-002", openai_api_key=openai.api_key)
     #vector_db = FAISS.from_documents(documents, embeddings)
-    vector_db = FAISS.load_local('faiss_index', embeddings, allow_dangerous_deserialization=True)
+    vector_db = FAISS.load_local('capstone-project-personalized-shopping-copilot/faiss_index', embeddings, allow_dangerous_deserialization=True)
     return vector_db
 
 def retrieve_transcation(cust_id):
