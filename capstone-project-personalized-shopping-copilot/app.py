@@ -28,9 +28,10 @@ df_products = pd.read_csv(StringIO(prod_catalog))
 
 # 1. Create Vector Database
 def load_vector_db():
-    embeddings = OpenAIEmbeddings(model="text-embedding-ada-002", openai_api_key=openai.api_key)
+    embeddings = OpenAIEmbeddings(model="text-embedding-ada-002")
     #vector_db = FAISS.from_documents(documents, embeddings)
-    vector_db = FAISS.load_local('faiss_index', embeddings, allow_dangerous_deserialization=True)
+    index_path = os.path.join(os.path.dirname(__file__), "faiss_index")
+    vector_db = FAISS.load_local(index_path, embeddings, allow_dangerous_deserialization=True)
     return vector_db
 
 def retrieve_transcation(cust_id):
@@ -83,7 +84,7 @@ def generate_streaming_response_openai(query, docs, purchase_hist):
         ],
         stream=True  # Enable streaming
     )
-     
+      
     # Placeholder for the response
     output_placeholder = st.empty()
     collected_messages = []
@@ -191,7 +192,6 @@ def render_product(product_id):
 def chatbot_function():
     # Streamlit Interface
     st.header("💬 Product Recommendation Chatbot")
-
     # Inisialisasi sesi untuk menyimpan percakapan dan ID pelanggan
     if "messages" not in st.session_state:
         st.session_state["messages"] = [{"role": "assistant", "content": "Welcome! Please provide your Customer ID to start."}]
