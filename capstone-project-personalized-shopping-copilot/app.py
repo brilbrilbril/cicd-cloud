@@ -11,22 +11,14 @@ import re
 from io import StringIO, BytesIO
 from google.cloud import storage
 import replicate
+import requests
 
 load_dotenv()
 
-# credential_path = "D:\RL\IYKRA\Capstone\application_default_credentials.json"
-# os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = credential_path
-
-# Please fill your openai api key
 client = storage.Client()
 bucket_name = "capstone_iykra"
 bucket = client.bucket(bucket_name)
-openai_api_key = ""
-os.environ["OPENAI_API_KEY"] = openai_api_key
 
-#csv_search_tool_history = CSVSearchTool("Dataset/Customer_Interaction_Data.csv")
-
-#csv_search_tool_product = CSVSearchTool("Dataset/final_product_catalog.csv")
 blob_cust_interaction = bucket.blob('Dataset/Customer_Interaction_Data_v2.csv')
 blob_product_catalog = bucket.blob('Dataset/final_product_catalog_v2.csv')
 cust_interaction = blob_cust_interaction.download_as_text()
@@ -155,8 +147,9 @@ def virtual_tryon(garment_img_path, person_img_path, prod_id):
         "cuuupid/idm-vton:c871bb9b046607b680449ecbae55fd8c6d945e0a1948644bf2361b3d021d3ff4",
         input=input
     )
-    print("done")
-    return str(output)
+    response = requests.get(str(output))
+    img = Image.open(BytesIO(response.content))
+    return img
 
 def upload_image_to_gcs(image_bytes, image_name):
     blob = bucket.blob(image_name)
@@ -238,12 +231,10 @@ def chatbot_function():
         else:
             # Proses permintaan dengan Crew
             try:
-                # inputs = {"query": prompt, "customer": st.session_state["customer_id"]}
-                # vector_db = load_vector_db()
-                # transaction_data = retrieve_transcation(st.session_state["customer_id"])
-                #response = multi_agent_rag(inputs['query'], vector_db, transaction_data)
-                print(df_products[df_products['Product_ID'] == "PROD4100"])
-                response = "PROD4100, PROD2104, and PROD3659"
+                inputs = {"query": prompt, "customer": st.session_state["customer_id"]}
+                vector_db = load_vector_db()
+                transaction_data = retrieve_transcation(st.session_state["customer_id"])
+                response = multi_agent_rag(inputs['query'], vector_db, transaction_data)
             except Exception as e:
                 response = f"An error occurred: {e}"
 
@@ -285,7 +276,7 @@ def chatbot_function():
             st.success("Done!")
 
             # tampilkan hasilnya
-            # result_vto.thumbnail((300, 600))
+            result_vto.thumbnail((300, 600))
             st.image(result_vto, caption=f"Try on for {st.session_state.product_id}")
 
             # Stop asking for the image
