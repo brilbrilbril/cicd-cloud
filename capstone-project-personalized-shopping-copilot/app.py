@@ -38,7 +38,7 @@ def retrieve_transcation(cust_id):
     return df[df['Customer_ID'] == cust_id].head(3).to_dict()
 
 # 2. Retrieval Agent
-def retrieve_documents(query, vector_db, top_k=5):
+def retrieve_documents(query, vector_db, top_k=10):
     return vector_db.similarity_search(query, top_k)
 
 # 3. Generator Agent
