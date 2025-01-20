@@ -77,7 +77,7 @@ def generate_streaming_response_openai(query, docs, purchase_hist):
 
     # Call OpenAI API with streaming
     response = openai.chat.completions.create(
-        model="gpt-4",  # Adjust the model name as per availability
+        model="gpt-4o",  # Adjust the model name as per availability
         messages=[
             {"role": "system", "content": "You are a helpful assistant. Answer accurately and give reason."},
             {"role": "user", "content": prompt}
