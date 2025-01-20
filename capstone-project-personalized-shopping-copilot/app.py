@@ -69,7 +69,7 @@ def generate_streaming_response_openai(query, docs, purchase_hist):
     # Combine retrieved documents into context
     context = "\n\n".join([doc.page_content for doc in docs])
     prompt = (
-        f"Answer the following question based on the context:\n\nContext: {context}\n by adding similarity witout adding the product id from history:\n\n History : {purchase_hist}\n\n Question: {query}. "
+        f"Answer the following question based on the context:\n\nContext: {context}\n by adding similarity reason from history:\n\n History : {purchase_hist}\n\n Question: {query}. "
         "Provide detailed and accurate answer with maximum 3 products. "
         "Always include the reason. "
         "If the question is product related, always attach product id. "
@@ -274,7 +274,7 @@ def chatbot_function():
                 print(st.session_state.product_url)
                 result_vto = virtual_tryon(st.session_state.product_url, uploaded_image.name, st.session_state.product_id)
             st.success("Done!")
-
+            
             # tampilkan hasilnya
             result_vto.thumbnail((300, 600))
             st.image(result_vto, caption=f"Try on for {st.session_state.product_id}")
