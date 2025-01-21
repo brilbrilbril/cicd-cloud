@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: tes-capstone
-        image: brillyando/tes_capstone:0.0.1
+        image: gcr.io/capstone-deploy-447802/chatbot-app:latest
         ports:
         - containerPort: 80
         volumeMounts:

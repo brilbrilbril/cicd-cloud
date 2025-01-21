@@ -7,10 +7,26 @@ steps:
   #push
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'gcr.io/capstone-deploy-447802/chatbot-app:latest']
-  #deploy
-  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-    entrypoint: gcloud
-    args: ['run', 'deploy', 'chatbot-app', '--image', 'gcr.io/capstone-deploy-447802/chatbot-app:latest', '--region', 'us-central1', '--platform', 'managed', '--allow-unauthenticated']
+  #deploy to cloud run
+  # - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  #   entrypoint: gcloud
+  #   args: ['run', 'deploy', 'chatbot-app', '--image', 'gcr.io/capstone-deploy-447802/chatbot-app:latest', '--region', 'us-central1', '--platform', 'managed', '--allow-unauthenticated']
   
+  # auth
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: bash
+    args:
+      - '-c'
+      - |
+        gcloud container clusters get-credentials ci-cd-capstone-cluster --zone asia-east2 --project capstone-deploy-447802
+
+  #deploy to gke
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: bash
+    args:
+      - '-c'
+      - |
+        kubectl apply -f kubernetes/deployment.yaml
+        kubectl apply -f kubernetes/service.yaml
 images:
   - 'gcr.io/capstone-deploy-447802/chatbot-app:latest'
