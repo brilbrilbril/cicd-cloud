@@ -26,14 +26,7 @@ steps:
     args:
       - '-c'
       - |
-        kubectl create secret generic my-apis --from-file=OPENAI_API_KEY="D:/RL/IYKRA/Capstone/OPENAI_API_KEY.txt" --from-file=REPLICATE_API_TOKEN="D:/RL/IYKRA/Capstone/REPLICATE_API_TOKEN.txt" --namespace=secret-manager-access
-        kubectl apply -f kubernetes/deployment.yaml
         kubectl apply -f kubernetes/service.yaml
-        kubectl create sa secret-manager-service
-        kubectl create namespace secret-manager-access
-        kubectl apply -f kubernetes/service-account.yaml
-        gcloud secrets add-iam-policy-binding OPENAI_API_KEY --role=roles/secretmanager.secretAccessor --member=principal://iam.googleapis.com/projects/764280358610/locations/global/workloadIdentityPools/capstone-deploy-447802.svc.id.goog/subject/ns/secret-manager-access/sa/secret-manager-service
-        gcloud secrets add-iam-policy-binding REPLICATE_API_TOKEN --role=roles/secretmanager.secretAccessor --member=principal://iam.googleapis.com/projects/764280358610/locations/global/workloadIdentityPools/capstone-deploy-447802.svc.id.goog/subject/ns/secret-manager-access/sa/secret-manager-service
         kubectl apply -f kubernetes/app-secrets.yaml
         kubectl apply -f kubernetes/my-pod.yaml
         kubectl set image deployment/tes-capstone tes-capstone=gcr.io/capstone-deploy-447802/chatbot-app:latest

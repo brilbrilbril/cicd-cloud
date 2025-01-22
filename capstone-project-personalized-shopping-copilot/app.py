@@ -205,7 +205,7 @@ def render_product(product_id):
 # Fungsi utama chatbot
 def chatbot_function():
     # Streamlit Interface
-    st.header("💬 Chatbot")
+    st.header("💬 Personalized Product Chatbottt")
     # Inisialisasi sesi untuk menyimpan percakapan dan ID pelanggan
     if "messages" not in st.session_state:
         st.session_state["messages"] = [{"role": "assistant", "content": "Welcome! Please provide your Customer ID to start."}]
