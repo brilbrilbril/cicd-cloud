@@ -20,6 +20,7 @@ spec:
         imagePullPolicy: Always
         ports:
         - containerPort: 80
+        
       #   volumeMounts:
       #   - name: google-credentials
       #     mountPath: /key.json  # Mount the secret as /key.json inside the container
