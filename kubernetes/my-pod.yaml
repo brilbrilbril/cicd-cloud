@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: tes-capstone-5d454cc7f8-pxwkp
+  name: tes-capstone
   namespace: secret-manager-access
 spec:
   nodeSelector:
@@ -9,11 +9,8 @@ spec:
   serviceAccountName: secret-manager-service
   containers:
   - image: gcr.io/capstone-deploy-447802/chatbot-app:latest
-    imagePullPolicy: IfNotPresent
-    name: tes-capstone-5d454cc7f8-pxwkp
-    resources:
-      requests:
-        cpu: 100m
+    imagePullPolicy: Always
+    name: tes-capstone
     stdin: true
     stdinOnce: true
     terminationMessagePath: /dev/termination-log
@@ -22,6 +19,17 @@ spec:
     volumeMounts:
       - mountPath: "/var/secrets"
         name: mysecret
+    env:
+    - name: OPENAI_API_KEY
+      valueFrom:
+        secretKeyRef:
+          name: my-apis
+          key: OPENAI_API_KEY
+    - name: REPLICATE_API_TOKEN
+      valueFrom:
+        secretKeyRef:
+          name: my-apis
+          key: REPLICATE_API_TOKEN
   volumes:
   - name: mysecret
     csi:
@@ -29,4 +37,3 @@ spec:
       readOnly: true
       volumeAttributes:
         secretProviderClass: api_provider
-        
