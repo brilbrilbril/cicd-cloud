@@ -30,6 +30,6 @@ steps:
         kubectl apply -f kubernetes/service.yaml
         kubectl apply -f kubernetes/app-secrets.yaml
         kubectl apply -f kubernetes/my-pod.yaml
-        kubectl rollout status deployment/chatbot-app
+        kubectl rollout status deployment/tes-capstone
 images:
   - 'gcr.io/capstone-deploy-447802/chatbot-app:latest'
