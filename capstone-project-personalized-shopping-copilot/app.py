@@ -15,6 +15,21 @@ import requests
 
 load_dotenv()
 
+from google.cloud import secretmanager
+
+# Create the Secret Manager client
+client = secretmanager.SecretManagerServiceClient()
+
+# Access the secret
+openai_api = "projects/capstone-deploy-447802/secrets/OPENAI_API_KEY/versions/1"
+response = client.access_secret_version(request={"name": openai_api})
+
+replicate_api = "projects/capstone-deploy-447802/secrets/REPLICATE_API_TOKEN/versions/1"
+response2 = client.access_secret_version(request={"name": replicate_api})
+# Get the secret payload
+os.environ["OPENAI_API_KEY"] = response.payload.data.decode("UTF-8")
+os.environ["REPLICATE_API_TOKEN"] = response2.payload.data.decode("UTF-8")
+
 client = storage.Client()
 bucket_name = "capstone_iykra"
 bucket = client.bucket(bucket_name)
@@ -191,7 +206,7 @@ def render_product(product_id):
 # Fungsi utama chatbot
 def chatbot_function():
     # Streamlit Interface
-    st.header("💬 Product Recommendation Chatbot")
+    st.header("💬 Chatbot")
     # Inisialisasi sesi untuk menyimpan percakapan dan ID pelanggan
     if "messages" not in st.session_state:
         st.session_state["messages"] = [{"role": "assistant", "content": "Welcome! Please provide your Customer ID to start."}]
