@@ -17,17 +17,17 @@ import requests
 load_dotenv()
 
 # Create the Secret Manager client
-# client = secretmanager.SecretManagerServiceClient()
+client = secretmanager.SecretManagerServiceClient()
 
-# # Access the secret
-# openai_api = "projects/capstone-deploy-447802/secrets/OPENAI_API_KEY/versions/1"
-# response = client.access_secret_version(request={"name": openai_api})
+# Access the secret
+openai_api = "projects/capstone-deploy-447802/secrets/OPENAI_API_KEY/versions/1"
+response = client.access_secret_version(request={"name": openai_api})
 
-# replicate_api = "projects/capstone-deploy-447802/secrets/REPLICATE_API_TOKEN/versions/1"
-# response2 = client.access_secret_version(request={"name": replicate_api})
-# # Get the secret payload
-# os.environ["OPENAI_API_KEY"] = response.payload.data.decode("UTF-8")
-# os.environ["REPLICATE_API_TOKEN"] = response2.payload.data.decode("UTF-8")
+replicate_api = "projects/capstone-deploy-447802/secrets/REPLICATE_API_TOKEN/versions/1"
+response2 = client.access_secret_version(request={"name": replicate_api})
+# Get the secret payload
+os.environ["OPENAI_API_KEY"] = response.payload.data.decode("UTF-8")
+os.environ["REPLICATE_API_TOKEN"] = response2.payload.data.decode("UTF-8")
 
 client = storage.Client()
 bucket_name = "capstone_iykra"

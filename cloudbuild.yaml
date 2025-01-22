@@ -26,6 +26,7 @@ steps:
     args:
       - '-c'
       - |
+        kubectl apply -f kubernetes/deployment.yaml
         kubectl apply -f kubernetes/service.yaml
         kubectl apply -f kubernetes/app-secrets.yaml
         kubectl apply -f kubernetes/my-pod.yaml
