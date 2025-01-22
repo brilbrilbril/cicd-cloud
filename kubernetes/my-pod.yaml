@@ -26,4 +26,4 @@ spec:
       driver: secrets-store-gke.csi.k8s.io
       readOnly: true
       volumeAttributes:
-        secretProviderClass: api_provider
+        secretProviderClass: api-provider
