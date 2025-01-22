@@ -8,7 +8,7 @@ spec:
     iam.gke.io/gke-metadata-server-enabled: "true"
   serviceAccountName: secret-manager-service
   containers:
-  - image: gcr.io/capstone-deploy-447802/chatbot-app:latest
+  - image: gcr.io/capstone-deploy-447802/chatbot-app:1.0.1
     imagePullPolicy: IfNotPresent
     name: tes-capstone-5d454cc7f8-pxwkp
     resources:

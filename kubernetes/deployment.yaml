@@ -16,7 +16,8 @@ spec:
     spec:
       containers:
       - name: tes-capstone
-        image: gcr.io/capstone-deploy-447802/chatbot-app:latest
+        image: gcr.io/capstone-deploy-447802/chatbot-app:1.0.1
+        imagePullPolicy: Always
         ports:
         - containerPort: 80
       #   volumeMounts:
