@@ -4,13 +4,14 @@ metadata:
   name: tes-capstone
   namespace: secret-manager-access
 spec:
-  nodeSelector:
-    iam.gke.io/gke-metadata-server-enabled: "true"
   serviceAccountName: secret-manager-service
   containers:
   - image: gcr.io/capstone-deploy-447802/chatbot-app:latest
-    imagePullPolicy: Always
+    imagePullPolicy: IfNotPresent
     name: tes-capstone
+    resources:
+      requests:
+        cpu: 100m
     stdin: true
     stdinOnce: true
     terminationMessagePath: /dev/termination-log
@@ -19,17 +20,6 @@ spec:
     volumeMounts:
       - mountPath: "/var/secrets"
         name: mysecret
-    env:
-    - name: OPENAI_API_KEY
-      valueFrom:
-        secretKeyRef:
-          name: my-apis
-          key: OPENAI_API_KEY
-    - name: REPLICATE_API_TOKEN
-      valueFrom:
-        secretKeyRef:
-          name: my-apis
-          key: REPLICATE_API_TOKEN
   volumes:
   - name: mysecret
     csi:

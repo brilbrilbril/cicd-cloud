@@ -10,12 +10,11 @@ import os
 import re
 from io import StringIO, BytesIO
 from google.cloud import storage
+from google.cloud import secretmanager
 import replicate
 import requests
 
 load_dotenv()
-
-from google.cloud import secretmanager
 
 # Create the Secret Manager client
 client = secretmanager.SecretManagerServiceClient()
