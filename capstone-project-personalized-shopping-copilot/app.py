@@ -20,7 +20,7 @@ load_dotenv()
 client = secretmanager.SecretManagerServiceClient()
 
 # Access the secret
-openai_api = "projects/capstone-deploy-447802/secrets/OPENAI_API_KEY/versions/1"
+openai_api = "projects/capstone-deploy-447802/secrets/OPENAI_API_KEY/versions/latest"
 response = client.access_secret_version(request={"name": openai_api})
 
 replicate_api = "projects/capstone-deploy-447802/secrets/REPLICATE_API_TOKEN/versions/1"
