@@ -52,7 +52,7 @@ def retrieve_transcation(cust_id):
     return df[df['Customer_ID'] == cust_id].head(3).to_dict()
 
 # 2. Retrieval Agent
-def retrieve_documents(query, vector_db, top_k=10):
+def retrieve_documents(query, vector_db, top_k=15):
     return vector_db.similarity_search(query, top_k)
 
 # 3. Generator Agent
@@ -83,7 +83,7 @@ def generate_streaming_response_openai(query, docs, purchase_hist):
     # Combine retrieved documents into context
     context = "\n\n".join([doc.page_content for doc in docs])
     prompt = (
-        f"Answer the following question based on the context:\n\nContext: {context}\n by adding similarity reason from history:\n\n History : {purchase_hist}\n\n Question: {query}. "
+        f"Answer the following question based on the context:\n\nContext: {context}\n by adding analyzing similarities from purchase history:\n\n History : {purchase_hist}\n\n Question: {query}. "
         "Provide detailed and accurate answer with maximum 3 products. "
         "Always include the reason. "
         "If the question is product related, always attach product id. "
@@ -93,10 +93,11 @@ def generate_streaming_response_openai(query, docs, purchase_hist):
     response = openai.chat.completions.create(
         model="gpt-4o",  # Adjust the model name as per availability
         messages=[
-            {"role": "system", "content": "You are a helpful assistant. Answer accurately and give reason."},
+            {"role": "system", "content": "You are a helpful assistant. Answer accurately and give reason, but always keep the friendly tone."},
             {"role": "user", "content": prompt}
         ],
-        stream=True  # Enable streaming
+        stream=True,
+        temperature=0.2  # Enable streaming
     )
       
     # Placeholder for the response
