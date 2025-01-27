@@ -38,7 +38,7 @@ def retrieve_transcation(cust_id):
     return df[df['Customer_ID'] == cust_id].head(3).to_dict()
 
 # 2. Retrieval Agent
-def retrieve_documents(query, vector_db, top_k=10):
+def retrieve_documents(query, vector_db, top_k=15):
     return vector_db.similarity_search(query, top_k)
 
 def generate_streaming_response_openai(query, docs, purchase_hist):
@@ -64,10 +64,11 @@ def generate_streaming_response_openai(query, docs, purchase_hist):
     response = openai.chat.completions.create(
         model="gpt-4o",  # Adjust the model name as per availability
         messages=[
-            {"role": "system", "content": "You are a helpful assistant. Answer accurately and give reason."},
+            {"role": "system", "content": "You are a helpful assistant. Answer accurately and give reason, but always keep the friendly tone."},
             {"role": "user", "content": prompt}
         ],
-        stream=True  # Enable streaming
+        stream=True,
+        temperature=0.2  # Enable streaming
     )
       
     # Placeholder for the response

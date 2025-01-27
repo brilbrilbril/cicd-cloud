@@ -11,6 +11,5 @@ steps:
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
     args: ['run', 'deploy', 'chatbot-app', '--image', 'gcr.io/capstone-deploy-447802/chatbot-app:latest', '--region', 'us-central1', '--platform', 'managed', '--allow-unauthenticated']
-  
 images:
   - 'gcr.io/capstone-deploy-447802/chatbot-app:latest'
