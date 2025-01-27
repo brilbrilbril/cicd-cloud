@@ -10,24 +10,10 @@ import os
 import re
 from io import StringIO, BytesIO
 from google.cloud import storage
-from google.cloud import secretmanager
 import replicate
 import requests
 
 load_dotenv()
-
-# # Create the Secret Manager client
-# client = secretmanager.SecretManagerServiceClient()
-
-# # Access the secret
-# openai_api = "projects/capstone-deploy-447802/secrets/OPENAI_API_KEY/versions/latest"
-# response = client.access_secret_version(request={"name": openai_api})
-
-# replicate_api = "projects/capstone-deploy-447802/secrets/REPLICATE_API_TOKEN/versions/1"
-# response2 = client.access_secret_version(request={"name": replicate_api})
-# # Get the secret payload
-# os.environ["OPENAI_API_KEY"] = response.payload.data.decode("UTF-8")
-# os.environ["REPLICATE_API_TOKEN"] = response2.payload.data.decode("UTF-8")
 
 client = storage.Client()
 bucket_name = "capstone_iykra"
@@ -55,38 +41,23 @@ def retrieve_transcation(cust_id):
 def retrieve_documents(query, vector_db, top_k=10):
     return vector_db.similarity_search(query, top_k)
 
-# 3. Generator Agent
-# def generate_response_openai(query, docs, purchase_hist):
-#     # Combine retrieved documents into context
-#     context = "\n\n".join([doc.page_content for doc in docs])
-#     prompt = (
-#         f"Answer the following question based on the context:\n\nContext: {context}\n by providing a similarity with user purchase history:\n\n History : {purchase_hist}\n\n Question: {query}. "
-#         "Provide detailed and accurate answer with maximum 3 products. "
-#         "Always include the reason. "
-#         "If the question is product related, always attach product id"
-#     )
-
-#     completion = openai.chat.completions.create(
-#         model="gpt-4o",  # Adjust the model name as per availability
-#         messages=[
-#             {"role": "system", "content": "You are a helpful assistant. Answer accurately and give reason"},
-#             {"role": "user", "content": prompt}
-#         ],
-#         stream=True
-#     )
-#     for chunk in completion:
-#         if chunk.choices[0].delta.content is not None:
-#             yield chunk.choices[0].delta.content
-    # return completion.choices[0].message.content
-
 def generate_streaming_response_openai(query, docs, purchase_hist):
     # Combine retrieved documents into context
     context = "\n\n".join([doc.page_content for doc in docs])
     prompt = (
-        f"Answer the following question based on the context:\n\nContext: {context}\n by adding similarity reason from history:\n\n History : {purchase_hist}\n\n Question: {query}. "
-        "Provide detailed and accurate answer with maximum 3 products. "
-        "Always include the reason. "
-        "If the question is product related, always attach product id. "
+        "You are an expert product recommendation assistant, designed to provide precise and thoughtful suggestions of fashion. "
+        "Your primary goal is to recommend up to three products based on the provided context, purchase history, and customer query. "
+        "If a question is unrelated to product recommendations, politely inform the user that you can only assist with product-related topics. "
+        "If a query requests gender-specific products, respond with: 'Our catalog has no gender-specific products.' "
+        "Here’s how you should answer: \n\n"
+        "- Always analyze and incorporate similarities from the provided purchase history and context. \n"
+        "- Provide a clear and concise explanation for why each product is recommended. \n"
+        "- Include the product ID for every recommended product. \n"
+        "- Maintain a polite and friendly tone.\n\n"
+        f"Context: {context}\n\n"
+        f"Purchase History: {purchase_hist}\n\n"
+        f"Question: {query}\n\n"
+        "Your response should balance accuracy and detail while remaining concise."
     )
 
     # Call OpenAI API with streaming
@@ -130,23 +101,18 @@ def handle_click(action, product_id, url):
 
 # virtual try on function
 def virtual_tryon(garment_img_path, person_img_path, prod_id):
-    print("download")
     garment_image = download_image_from_gcs(garment_img_path)
     person_image = download_image_from_gcs(person_img_path)
-    print("bytes")
     garment_file = BytesIO()
     person_file = BytesIO()
     if garment_image.mode == "RGBA":
         garment_image = garment_image.convert("RGB")
     if person_image.mode == "RGBA":
         person_image = person_image.convert("RGB")
-    print("save")
     garment_image.save(garment_file, format="JPEG")
     person_image.save(person_file, format="JPEG")
-    print("seek")
     garment_file.seek(0)
     person_file.seek(0)
-    print("vton")
     type = df_products[df_products['Product_ID'] == prod_id]["Type"].to_string(index=False)
     short_desc = df_products[df_products['Product_ID'] == prod_id]["Category"].to_string(index=False)
     input = {
@@ -172,13 +138,8 @@ def upload_image_to_gcs(image_bytes, image_name):
     #return f"gs://{bucket.name}/{image_name}"
 
 def download_image_from_gcs(img_path):
-    # Construct the full GCS URL by prepending 'gs://'
-    #gcs_url = f"gs://{bucket_name}/{gcs_path}"
-    
-    # Download the image as bytes from GCS
     blob = client.bucket(bucket_name).blob(img_path)
     image_bytes = blob.download_as_bytes()
-    # Open the image from the downloaded bytes
     image = Image.open(BytesIO(image_bytes)).convert("RGB")
     return image
 
