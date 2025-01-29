@@ -20,6 +20,6 @@ This is the CI/CD phase of our capstone project, product recommendation chatbot 
 - The URL will be shown and app can completely be used by anyone who has the URL.
 
 # Demo
-[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/yzXIu8Tc0r4/0.jpg)](https://www.youtube.com/watch?v=yzXIu8Tc0r4)
+[![YouTube](http://i.ytimg.com/vi/yzXIu8Tc0r4/hqdefault.jpg)](https://www.youtube.com/watch?v=yzXIu8Tc0r4)
 
 
