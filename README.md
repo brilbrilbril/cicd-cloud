@@ -19,4 +19,7 @@ This is the CI/CD phase of our capstone project, product recommendation chatbot 
 - After the app is deployed to Cloud Run, I added secret key, which is Openai API key and Replicate API token.
 - The URL will be shown and app can completely be used by anyone who has the URL.
 
+# Demo
+https://youtu.be/yzXIu8Tc0r4
+
 
